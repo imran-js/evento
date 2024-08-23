@@ -1,6 +1,9 @@
 import EventList from "@/components/EventList";
 import H1 from "@/components/H1";
-import { TEventProps } from "@/lib/types";
+import { Suspense } from "react";
+import Loading from "./loading";
+import { capitalize } from "@/utils/utils";
+import { Metadata } from "next";
 
 type TEventsPageProps = {
   params: {
@@ -8,13 +11,16 @@ type TEventsPageProps = {
   };
 };
 
+export function generateMetadata({
+  params: { city },
+}: TEventsPageProps): Metadata {
+  const EventCity = capitalize(city);
+  return {
+    title: EventCity === "All" ? "All Events" : `Events In ${EventCity} `,
+  };
+}
+
 async function EventsPage({ params: { city } }: TEventsPageProps) {
-  const response = await fetch(
-    `https://bytegrad.com/course-assets/projects/evento/api/events?city=${city}`
-  );
-
-  const events: TEventProps[] = await response.json();
-
   return (
     <main className="flex flex-col items-center py-24 px-[20px] min-h-[110vh]">
       <H1 className="mb-28">
@@ -23,7 +29,10 @@ async function EventsPage({ params: { city } }: TEventsPageProps) {
         {city !== "all" &&
           `Events in  ${city.charAt(0).toUpperCase() + city.slice(1)}`}
       </H1>
-      <EventList events={events} />
+
+      <Suspense fallback={<Loading />}>
+        <EventList city={city} />
+      </Suspense>
     </main>
   );
 }

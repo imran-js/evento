@@ -1,5 +1,7 @@
 import H1 from "@/components/H1";
 import { TEventProps } from "@/lib/types";
+import { capitalize, getEvent, replaceDashesWithSpace } from "@/utils/utils";
+import { Metadata } from "next";
 import Image from "next/image";
 
 type TevetProps = {
@@ -8,12 +10,16 @@ type TevetProps = {
   };
 };
 
-async function EventPage({ params: { slug } }: TevetProps) {
-  const response = await fetch(
-    `https://bytegrad.com/course-assets/projects/evento/api/events/${slug}`
-  );
+export function generateMetadata({ params: { slug } }: TevetProps): Metadata {
+  let name = replaceDashesWithSpace(slug);
+  let EventName = capitalize(name);
+  return {
+    title: EventName,
+  };
+}
 
-  const event: TEventProps = await response.json();
+async function EventPage({ params: { slug } }: TevetProps) {
+  const event = await getEvent(slug);
 
   return (
     <main>
