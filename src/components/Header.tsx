@@ -2,8 +2,9 @@
 import Link from "next/link";
 import Logo from "./Logo";
 import { usePathname } from "next/navigation";
-import clsx from "clsx";
+
 import { motion } from "framer-motion";
+import { cn } from "@/utils/cn";
 
 const NavLinks = [
   {
@@ -26,7 +27,7 @@ function Header() {
         <ul className="flex  h-full gap-x-6 text-sm">
           {NavLinks.map((link) => (
             <li
-              className={clsx(
+              className={cn(
                 "flex items-center  hover:text-white  relative transition",
                 {
                   "text-white": activePath === link.routePath,

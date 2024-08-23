@@ -12,14 +12,9 @@ function EventCard({ event }: Props) {
       className=" flex-1 basis-80 h-[380px] max-w-[500px]"
       href={`/event/${event.slug}`}
     >
-      <section
-        className=" w-full h-full relative flex flex-col 0 overflow-hidden  bg-white/[3%] rounded-xl
-      hover:scale-105
-      active:scale-[1.02] transition
-    "
-      >
+      <section className=" w-full h-full relative flex flex-col 0 overflow-hidden  bg-white/[3%] rounded-xl state-effects ">
         <Image
-          className="h-[60%] object-fit"
+          className="h-[60%] object-cover"
           src={event.imageUrl}
           alt="event-image"
           width={500}
