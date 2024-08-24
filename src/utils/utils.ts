@@ -1,4 +1,4 @@
-import { TEventProps } from "@/lib/types";
+import prisma from "@/lib/db";
 
 /**
  * Capitalizes first letters of words in string.
@@ -21,20 +21,32 @@ export const sleep = (delay: number) =>
   new Promise((resolve) => setTimeout(resolve, delay));
 
 export const getEvents = async (city: string) => {
-  const response = await fetch(
-    `https://bytegrad.com/course-assets/projects/evento/api/events?city=${city}`
-  );
+  const events = await prisma.eventoEvent.findMany({
+    where: {
+      city: city === "all" ? undefined : capitalize(city),
+    },
+  });
 
-  const events: TEventProps[] = await response.json();
+  // const response = await fetch(
+  //   `https://bytegrad.com/course-assets/projects/evento/api/events?city=${city}`
+  // );
+
+  // const events: TEventProps[] = await response.json();
   return events;
 };
 
 export const getEvent = async (slug: string) => {
-  const response = await fetch(
-    `https://bytegrad.com/course-assets/projects/evento/api/events/${slug}`
-  );
+  const event = await prisma.eventoEvent.findUnique({
+    where: {
+      slug,
+    },
+  });
 
-  const event: TEventProps = await response.json();
+  // const response = await fetch(
+  //   `https://bytegrad.com/course-assets/projects/evento/api/events/${slug}`
+  // );
+
+  // const event: TEventProps = await response.json();
 
   return event;
 };
